@@ -1,0 +1,14 @@
+# DOTA dataset
+
+# train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
+train: ./DOTA/train_split_1024/images
+val: ./DOTA/val_split_1024/images
+test: ./DOTA/test_split_1024/images
+
+nc: 16
+
+# class names
+names: ['plane', 'ship', 'storage tank', 'baseball diamond', 
+        'tennis court','basketball court', 'ground track field', 'harbor', 
+        'bridge', 'large vehicle', 'small vehicle', 'helicopter', 
+        'roundabout', 'soccer ball field', 'swimming pool', 'container crane']

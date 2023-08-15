@@ -1,0 +1,74 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python multiple GPU training: train_step1.py",
+            "type": "python",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "module": "torch.distributed.launch",
+            "justMyCode": true,
+            "args": [
+                "--nproc_per_node",
+                "4",
+                "--master_port",
+                "9527",
+                "train_step1.py",
+                "--workers",
+                "8",
+                "--device",
+                "0,1,2,3",
+                "--sync-bn",
+                "--batch-size",
+                "128",
+                "--epochs",
+                "300",
+                "--img",
+                "640",
+                "--cfg",
+                "cfg/dy-yolov7-step1.yaml",
+                "--weight",
+                "''",
+                "--data",
+                "data/coco.yaml",
+                "--hyp",
+                "hyp/hyp.scratch.p5.yaml",
+                "--name",
+                "dy-yolov7-step1"
+            ]
+        },
+        {
+            "name": "Python Single GPU: train_step1.py",
+            "type": "python",
+            "request": "launch",
+            "program": "train_step1.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--workers",
+                "8",
+                "--device",
+                "0,1,2,3",
+                "--batch-size",
+                "16",
+                "--epochs",
+                "400",
+                "--img",
+                "640",
+                "--cfg",
+                "cfg/dy-yolov7-step1.yaml",
+                "--weight",
+                "",
+                "--data",
+                "data/coco.yaml",
+                "--hyp",
+                "hyp/hyp.scratch.p5.yaml",
+                "--name",
+                "dy-yolov7-step1"
+            ],
+        }
+    ]
+}
