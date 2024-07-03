@@ -9,7 +9,7 @@ from pathlib import Path
 from threading import Thread
 import yaml
 from tqdm import tqdm
-import gc
+import gc # TODO
 
 import numpy as np
 import torch
@@ -35,7 +35,7 @@ from utils.torch_utils import ModelEMA, select_device, intersect_dicts, torch_di
 from utils.wandb_logging.wandb_utils import WandbLogger, check_wandb_resume
 from utils.checkpoint import get_state_dict
 
-import os
+import os # TODO 加入了这两行
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:384"
 
 
@@ -403,11 +403,12 @@ def train(hyp, opt, device, tb_writer=None):
                     wandb_logger.log({"Mosaics": [wandb_logger.wandb.Image(str(x), caption=x.name) for x in
                                                   save_dir.glob('train*.jpg') if x.exists()]})
                     
-        gc.collect()
+        gc.collect() # TODO 加入了gc.collect()和下一行
         torch.cuda.empty_cache()
 
             # end batch ------------------------------------------------------------------------------------------------
         # end epoch ----------------------------------------------------------------------------------------------------
+        # before = torch.cuda.memory_allocated() # TODO
 
         # Scheduler
         lr = [x['lr'] for x in optimizer.param_groups]  # for tensorboard
@@ -486,6 +487,8 @@ def train(hyp, opt, device, tb_writer=None):
                             last.parent, opt, epoch, fi, best_model=best_fitness == fi)
                 del ckpt
 
+        # after = torch.cuda.memory_allocated() # TODO
+        # print(f"uses {(after-before)/1024**2:.2f} MB")
         # end epoch ----------------------------------------------------------------------------------------------------
     # end training
     if rank in [-1, 0]:
@@ -512,7 +515,7 @@ def train(hyp, opt, device, tb_writer=None):
         wandb_logger.finish_run()
     else:
         dist.destroy_process_group()
-    gc.collect()
+    gc.collect() # TODO 加入了gc.collect()
     torch.cuda.empty_cache()
     return results
 

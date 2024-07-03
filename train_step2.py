@@ -87,6 +87,11 @@ def train(hyp, opt, device, tb_writer=None):
     pretrained = weight.endswith('.pt')
     if pretrained:
         ckpt = torch.load(weight, map_location='cpu')  # load checkpoint
+
+        # DEBUG:
+        print("weight: ", weight)
+        # print("ckpt['optimizer']: ", ckpt['optimizer'])
+
         state_dict = ckpt['model']
         model = Model(opt.cfg, ch=3, nc=nc)  # create
         exclude = ['anchor'] if (opt.cfg or hyp.get('anchors')) and not opt.resume else []  # exclude keys
@@ -106,13 +111,13 @@ def train(hyp, opt, device, tb_writer=None):
     for k, v in model.named_parameters():
         v.requires_grad = True  # train all layers
         if any(x in k for x in freeze):
-            print('freezing %s' % k)
+            # print('freezing %s' % k)
             v.requires_grad = False
 
     # freeze the parameters of the cascaded detector
     for k, v in model.named_parameters():
         if 'router' not in k:
-            print('freezing %s' % k)
+            # print('freezing %s' % k)
             v.requires_grad = False
 
     # Optimizer

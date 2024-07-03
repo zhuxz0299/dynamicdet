@@ -76,6 +76,8 @@ def get_thres(data,
         with torch.no_grad():
             # Run model
             cur_score = model(img, augment=augment)  # inference and training outputs
+            # cur_score = torch.tensor(cur_score)
+            # print("cur_score.shape: ", cur_score.shape)
             score_list.append(cur_score.item())
 
     thres = ['0']
