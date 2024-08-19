@@ -198,5 +198,13 @@ if __name__ == '__main__':
     opt = parser.parse_args()
     print(opt)
 
+    import wandb
+    wandb.init(
+        # set the wandb project where this run will be logged
+        project="dy-inference"
+    )
+
     with torch.no_grad():
         detect()
+
+    wandb.finish()

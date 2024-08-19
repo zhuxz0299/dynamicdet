@@ -339,11 +339,27 @@ if __name__ == '__main__':
     parser.add_argument('--v5-metric', action='store_true', help='assume maximum recall as 1.0 in AP calculation')
     parser.add_argument('--dy-thres', type=float, default=0.5, help='dynamic threshold')
     parser.add_argument('--save-results', action='store_true', help='save results')
+    parser.add_argument('--artifact_alias', type=str, default="latest", help='version of dataset artifact to be used')
+    parser.add_argument('--bbox_interval', type=int, default=-1, help='Set bounding-box image logging interval for W&B')
+    parser.add_argument('--entity', default=None, help='W&B entity')
+    parser.add_argument('--upload_dataset', action='store_true', help='Upload dataset as W&B artifact table') # to use with wandb
     opt = parser.parse_args()
     opt.save_json |= opt.data.endswith('coco.yaml')
     opt.data = check_file(opt.data)  # check file
     print(opt)
 
+
+    from utils.wandb_logging.wandb_utils import WandbLogger
+    import os
+    opt.save_dir = increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok)  # increment run
+    weight = opt.weight
+    run_id = torch.load(weight, map_location='cpu')['wandb_id'] if weight.endswith('.pt') and os.path.isfile(weight) else None
+    with open(opt.data) as f:
+        data_dict = yaml.load(f, Loader=yaml.SafeLoader)  # data dict
+    opt.global_rank = int(os.environ['RANK']) if 'RANK' in os.environ else -1
+    opt.epochs = 300  # run.py
+    opt.resume = False # align with train in format
+    wandb_logger = WandbLogger(opt, Path(opt.save_dir).stem, run_id, data_dict)
     if opt.task in ('train', 'val', 'test'):  # run normally
         test(opt.data,
              opt.cfg,
@@ -361,7 +377,8 @@ if __name__ == '__main__':
              save_conf=opt.save_conf,
              v5_metric=opt.v5_metric,
              dy_thres=opt.dy_thres,
-             save_results=opt.save_results
+             save_results=opt.save_results,
+             wandb_logger=wandb_logger
              )
 
     else:

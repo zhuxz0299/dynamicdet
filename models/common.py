@@ -357,7 +357,11 @@ class CBFuse(nn.Module):
 
     def forward(self, xs):
         target_size = xs[-1].shape[2:]
+        # print("DEBUG: target_size = {}".format(target_size))
+        # print("DEBUG: xs[-1:].shape = {}".format([x.shape for x in xs[-1:]]))
+        # [print("DEBUG: xs[{}][self.idx[{}]={}].shape = {}".format(i, i, self.idx[i], x[self.idx[i]].shape)) for i, x in enumerate(xs[:-1])]
         res = [F.interpolate(x[self.idx[i]], size=target_size, mode='nearest') for i, x in enumerate(xs[:-1])]
+        # print("DEBUG: res.shape = {}, xs[-1:].shape = {}".format([x.shape for x in res], [x.shape for x in xs[-1:]]))
         out = torch.sum(torch.stack(res + xs[-1:]), dim=0)
         return out
 

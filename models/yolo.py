@@ -262,6 +262,17 @@ class Model(nn.Module):
                     dt.append((time_synchronized() - t) * 100)
                     print('%10.1f%10.0f%10.1fms %-40s' % (o, m.np, dt[-1], m.type))
 
+                # print(f"DEBUG: type(x) = {type(x)}, type(m) = {type(m)}, shape of x = ", end='\t')
+                # if type(x) is list:
+                #     for i in x:
+                #         if type(i) is tuple:
+                #             print([j.shape for j in i])
+                #         else:
+                #             print(i.shape)
+                # elif type(x) is torch.Tensor:
+                #     print(x.shape)
+                # elif type(x) is tuple:
+                #     print([i.shape for i in x])
                 x = m(x)  # run
 
                 y.append(x if m.i in self.save_b2 else None)  # save output
@@ -664,3 +675,10 @@ def parse_model(d, ch_b):  # model_dict, input_channels(3)
 
     return nn.Sequential(*layers_b), sorted(save_b), nn.Sequential(*layers_b2), sorted(save_b2), \
             nn.Sequential(*layers_h), sorted(save_h), nn.Sequential(*layers_h2), sorted(save_h2)
+
+
+if __name__ == '__main__':
+    model = Model('cfg/dy-yolov7-step2.yaml', ch=3, nc=16)
+    total_params = sum(p.numel() for p in model.parameters())
+    print(total_params)
+

@@ -242,6 +242,7 @@ crashlytics-build.properties
 fabric.properties
 
 # 
+demo.py
 ckpt_test.py
 DOTA.zip
 environment_DynamicDet.yaml
@@ -249,3 +250,4 @@ img_size.py
 record.txt
 .vscode/
 get_file_tree.py
+weights/
