@@ -18,11 +18,16 @@ coco
 coco128
 VOC
 DOTA
+UAVOD10
+xView
 
 coco2017labels-segments.zip
 test2017.zip
 train2017.zip
 val2017.zip
+uavod-10-DatasetNinja.tar
+xview-dataset.zip
+xview-yolo-dataset.zip
 
 
 
@@ -251,3 +256,4 @@ record.txt
 .vscode/
 get_file_tree.py
 weights/
+other/
